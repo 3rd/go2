@@ -4,13 +4,16 @@
 
 // List of reserved keywords
 var RESERVED_KEYWORDS = [
-  "list", "ls",
-  "add",
-  "remove", "rm",
-  "help"
+  'list', 'ls',
+  'add',
+  'remove', 'rm',
+  'help'
 ];
+
 var ARGV = process.argv.slice(2);
 var ARGC = ARGV.length;
+var CWD = process.cwd();
+var DATA = {};
 
 /* @end Globals */
 
@@ -27,7 +30,7 @@ if(ARGC == 0){
 /* @start Banner */
 
 function print_banner(){
-  var banner = "BANNER";
+  var banner = 'BANNER';
   console.log(banner);
 }
 
@@ -36,16 +39,17 @@ function print_banner(){
 /* @start Command interpreter */
 
 function run_command(){
-  switch(ARGC[1]){
-    case "add":
+  switch(ARGV[0]){
+    case 'add':
+      command_add();
       break;
-    case "remove":
-    case "rm":
+    case 'remove':
+    case 'rm':
       break;
-    case "list":
-    case "ls":
+    case 'list':
+    case 'ls':
       break;
-    case "help":
+    case 'help':
     default:
       print_banner();
       break;
@@ -55,5 +59,24 @@ function run_command(){
 /* @end Command interpreter */
 
 /* @start Command functions */
+
+function command_add(){
+  if(ARGC < 2) {
+    print_banner();
+    return;
+  }
+  var alias = '';
+  if(ARGC == 2){
+    alias = ARGV[1];
+  } else {
+
+  }
+  if(RESERVED_KEYWORDS.indexOf(alias) != -1){
+    console.log('ERROR: Pick a different name for this location, "%s" is reserved.', alias);
+  } else {
+    console.log('New bind: %s ---> go2 %s', CWD, alias);
+    console.log('You can now use "go2 %s" to cd into this directory.', alias);
+  }
+}
 
 /* @end Command functions */
