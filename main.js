@@ -59,7 +59,13 @@ fs.exists(DATA_FILE, function(exists){
 /* @start Banner */
 
 function print_banner(){
-  var banner = 'BANNER';
+  var banner = '\
+go2 - CLI spaceship that takes you wherever you want\
+\nUsage:\n\
+  - go2 list / ls : will list the current path aliases\n\
+  - go2 add [name] : will add a new alias with the given name for cwd\n\
+  - go2 remove / rm [name] : will remove the given alias\n\
+  - go2 help : will print this silly banner';
   console.log(banner);
   exit();
 }
