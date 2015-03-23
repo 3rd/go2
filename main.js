@@ -13,7 +13,9 @@ var RESERVED_KEYWORDS = [
 var ARGV = process.argv.slice(2);
 var ARGC = ARGV.length;
 var CWD = process.cwd();
-var DATA = {};
+var DATA = {
+  "home" : "~"
+};
 
 /* @end Globals */
 
@@ -45,6 +47,7 @@ function run_command(){
       break;
     case 'remove':
     case 'rm':
+      command_rm();
       break;
     case 'list':
     case 'ls':
@@ -69,7 +72,7 @@ function command_add(){
   if(ARGC == 2){
     alias = ARGV[1];
   } else {
-
+    print_banner();
   }
   if(RESERVED_KEYWORDS.indexOf(alias) != -1){
     console.log('ERROR: Pick a different name for this location, "%s" is reserved.', alias);
@@ -79,4 +82,24 @@ function command_add(){
   }
 }
 
+function command_rm(){
+  if(ARGC < 2) {
+    print_banner();
+    return;
+  }
+  var alias = '';
+  if(ARGC == 2){
+    alias = ARGV[1];
+  } else {
+    print_banner();
+  }
+  if(!DATA.hasOwnProperty(alias)){
+    console.log('ERROR: Specified alias "%s" does not exist.', alias);
+  } else {
+    console.log('Removed alias "%s".', alias);
+  }
+}
+
 /* @end Command functions */
+
+
