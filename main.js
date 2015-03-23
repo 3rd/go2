@@ -1,5 +1,12 @@
 #! /usr/bin/env node
 
+/* @start Modules */
+
+var fs = require('fs');
+var path = require('path');
+
+/* @end Modules */
+
 /* @start Globals */
 
 // List of reserved keywords
@@ -14,19 +21,38 @@ var ARGV = process.argv.slice(2);
 var ARGC = ARGV.length;
 var CWD = process.cwd();
 var PATH = './';
+var HOME_DIRECTORY = process.env['HOME'];
+var DATA_FILE = path.join(HOME_DIRECTORY, '.go2.json');
 var DATA = {
-  "home" : process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']
+  'home' : HOME_DIRECTORY
 };
 
 /* @end Globals */
 
 /* @start Main */
 
-if(ARGC == 0){
-	print_banner();
-} else {
-	run_command();
-}	
+fs.exists(DATA_FILE, function(exists){
+  if(exists){
+    fs.readFile(DATA_FILE, function(err, data){
+      if(!err){
+        try {
+          DATA = JSON.parse(data);
+        } catch(ex){}
+      }
+      if(ARGC == 0){
+          print_banner();
+      } else {
+        run_command();
+      }
+    });
+  } else {
+    if(ARGC == 0){
+        print_banner();
+    } else {
+      run_command();
+    }
+  }
+});
 
 /* @end Main */
 
@@ -77,10 +103,12 @@ function command_add(){
   if(RESERVED_KEYWORDS.indexOf(alias) != -1){
     console.log('ERROR: Pick a different name for this location, "%s" is reserved.', alias);
   } else {
-    console.log('New bind: %s ---> go2 %s', CWD, alias);
-    console.log('You can now use "go2 %s" to cd into this directory.', alias);
+    DATA[alias] = CWD;
+    save_data(function(){
+      console.log('New bind: %s ---> go2 %s', CWD, alias);
+      exit();
+    });
   }
-  exit();
 }
 
 function command_rm(){
@@ -90,11 +118,15 @@ function command_rm(){
   }
   var alias = ARGV[1];
   if(DATA.hasOwnProperty(alias)){
-    console.log('Removed alias "%s".', alias);
+    delete DATA[alias];
+    save_data(function(){
+      console.log('Removed alias "%s".', alias);
+      exit();
+    });
   } else {
     console.log('ERROR: Specified alias "%s" does not exist.', alias);
+    exit();
   }
-  exit();
 }
 
 function command_ls(){
@@ -112,7 +144,7 @@ function go2(){
   var alias = ARGV[0];
   if(DATA.hasOwnProperty(alias)){
     var location = DATA[alias];
-    console.log("Switching to location: %s", location);
+    console.log('Switching to location: %s', location);
     PATH = location;
   } else {
     console.log('ERROR: Could not find alias "%s".', alias);
@@ -126,4 +158,16 @@ function exit(){
 
 /* @end Command functions */
 
+/* @start Storage functions */
+
+function save_data(callback){
+  fs.writeFile(DATA_FILE, JSON.stringify(DATA), function(err){
+    if(err){
+      console.log('ERROR: Could not save configuration file to "%s".', DATA_FILE);
+    }
+    callback();
+  });
+}
+
+/* @end */
 
