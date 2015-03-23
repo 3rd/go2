@@ -51,6 +51,7 @@ function run_command(){
       break;
     case 'list':
     case 'ls':
+      command_ls();
       break;
     case 'help':
     default:
@@ -97,6 +98,12 @@ function command_rm(){
     console.log('ERROR: Specified alias "%s" does not exist.', alias);
   } else {
     console.log('Removed alias "%s".', alias);
+  }
+}
+
+function command_ls(){
+  for(var alias in DATA){
+    console.log('%s ---> %s', alias, DATA[alias]);
   }
 }
 
