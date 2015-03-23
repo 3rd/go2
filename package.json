@@ -1,7 +1,7 @@
 {
   "name": "go2",
-  "version": "1.0.0",
-  "description": "Simple command-line utility that allows you to navigate faster between common paths.",
+  "version": "1.0.1",
+  "description": "Simple command-line utility to quickly switch between working directories.",
   "main": "main",
   "scripts": {
     "test": "exit 0"

@@ -1,5 +1,7 @@
 # go2
 
+---
+
 **go2** is a simple cli utility that allows you to index the directories you use often and create some kind of alias for them without polluting your shell's environment.
 
 ### Installation
