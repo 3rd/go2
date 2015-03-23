@@ -2,7 +2,7 @@
   "name": "go2",
   "version": "1.0.0",
   "description": "Simple command-line utility that allows you to navigate faster between common paths.",
-  "main": "index.js",
+  "main": "main",
   "scripts": {
     "test": "exit 0"
   },
@@ -22,5 +22,8 @@
     "url": "https://github.com/neculaesei/go2/issues"
   },
   "homepage": "https://github.com/neculaesei/go2",
-  "preferGlobal" : "true"
+  "preferGlobal" : "true",
+  "bin" : {
+    "go2" : "main.js"
+  }
 }
