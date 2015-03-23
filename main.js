@@ -13,6 +13,7 @@ var RESERVED_KEYWORDS = [
 var ARGV = process.argv.slice(2);
 var ARGC = ARGV.length;
 var CWD = process.cwd();
+var PATH = './';
 var DATA = {
   "home" : process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']
 };
@@ -34,6 +35,7 @@ if(ARGC == 0){
 function print_banner(){
   var banner = 'BANNER';
   console.log(banner);
+  exit();
 }
 
 /* @end Banner */
@@ -78,6 +80,7 @@ function command_add(){
     console.log('New bind: %s ---> go2 %s', CWD, alias);
     console.log('You can now use "go2 %s" to cd into this directory.', alias);
   }
+  exit();
 }
 
 function command_rm(){
@@ -91,12 +94,14 @@ function command_rm(){
   } else {
     console.log('ERROR: Specified alias "%s" does not exist.', alias);
   }
+  exit();
 }
 
 function command_ls(){
   for(var alias in DATA){
     console.log('%s ---> %s', alias, DATA[alias]);
   }
+  exit();
 }
 
 function go2(){
@@ -108,9 +113,15 @@ function go2(){
   if(DATA.hasOwnProperty(alias)){
     var location = DATA[alias];
     console.log("Switching to location: %s", location);
+    PATH = location;
   } else {
     console.log('ERROR: Could not find alias "%s".', alias);
   }
+  exit();
+}
+
+function exit(){
+  console.log(PATH);
 }
 
 /* @end Command functions */

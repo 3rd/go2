@@ -24,6 +24,7 @@
   "homepage": "https://github.com/neculaesei/go2",
   "preferGlobal" : "true",
   "bin" : {
-    "go2" : "main.js"
+    "go2" : "main.sh",
+    "go2node" : "main.js"
   }
 }
