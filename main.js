@@ -14,7 +14,7 @@ var ARGV = process.argv.slice(2);
 var ARGC = ARGV.length;
 var CWD = process.cwd();
 var DATA = {
-  "home" : "~"
+  "home" : process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']
 };
 
 /* @end Globals */
@@ -54,8 +54,10 @@ function run_command(){
       command_ls();
       break;
     case 'help':
-    default:
       print_banner();
+      break;
+    default:
+      go2();
       break;
   }
 }
@@ -65,16 +67,11 @@ function run_command(){
 /* @start Command functions */
 
 function command_add(){
-  if(ARGC < 2) {
+  if(ARGC != 2) {
     print_banner();
     return;
   }
-  var alias = '';
-  if(ARGC == 2){
-    alias = ARGV[1];
-  } else {
-    print_banner();
-  }
+  var alias = ARGV[1];
   if(RESERVED_KEYWORDS.indexOf(alias) != -1){
     console.log('ERROR: Pick a different name for this location, "%s" is reserved.', alias);
   } else {
@@ -84,26 +81,35 @@ function command_add(){
 }
 
 function command_rm(){
-  if(ARGC < 2) {
+  if(ARGC != 2) {
     print_banner();
     return;
   }
-  var alias = '';
-  if(ARGC == 2){
-    alias = ARGV[1];
-  } else {
-    print_banner();
-  }
-  if(!DATA.hasOwnProperty(alias)){
-    console.log('ERROR: Specified alias "%s" does not exist.', alias);
-  } else {
+  var alias = ARGV[1];
+  if(DATA.hasOwnProperty(alias)){
     console.log('Removed alias "%s".', alias);
+  } else {
+    console.log('ERROR: Specified alias "%s" does not exist.', alias);
   }
 }
 
 function command_ls(){
   for(var alias in DATA){
     console.log('%s ---> %s', alias, DATA[alias]);
+  }
+}
+
+function go2(){
+  if(ARGC != 1) {
+    print_banner();
+    return;
+  }
+  var alias = ARGV[0];
+  if(DATA.hasOwnProperty(alias)){
+    var location = DATA[alias];
+    console.log("Switching to location: %s", location);
+  } else {
+    console.log('ERROR: Could not find alias "%s".', alias);
   }
 }
 
