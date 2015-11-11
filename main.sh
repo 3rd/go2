@@ -6,6 +6,6 @@ echo "$GO2DISPLAY"
 GO2LOCATION=$(echo "$GO2OUTPUT" | tail -n1)
 if [ "$GO2LOCATION" != "./" ]
 then
-	cd $GO2LOCATION
+	cd "$GO2LOCATION"
 	exec $SHELL
 fi
